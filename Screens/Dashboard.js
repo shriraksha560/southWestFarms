@@ -50,6 +50,34 @@ export default class Dashboard extends React.Component {
     };
   }
 
+  handleAddBtn = (item, value) => {
+    let stringifiedItem = JSON.stringify(item);
+    console.log('handleAddBtn item -' + stringifiedItem);
+    console.log('handleAddBtn value-' + value);
+    let newArray = [];
+    if (value) {
+      newArray.push(stringifiedItem);
+      console.log('New array length-' + newArray.length);
+      if (newArray.length > 0) {
+        newArray.map((data, index) => {
+          console.log('data-' + data);
+          console.log('index-' + index);
+          if (data.id === stringifiedItem.id) {
+            console.log("data.id === stringifiedItem.id");
+            
+            console.log("stringifiedItem.count"+stringifiedItem.count);
+
+          }
+          else{
+            console.log("data.id != stringifiedItem.id");
+
+          }
+        });
+      }
+    } else {
+      console.log('value is null/false');
+    }
+  };
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
@@ -164,6 +192,7 @@ export default class Dashboard extends React.Component {
     clearedAsync = await AsyncStorage.clear();
     console.log('clearAsync log' + clearedAsync);
   }
+
   render() {
     console.log('datasource--' + this.state.dataSource);
     const navigation = this.props.navigation;
@@ -295,19 +324,29 @@ export default class Dashboard extends React.Component {
                                 height={40}
                                 colorLeft="#0FA521"
                                 colorRight="#0FA521"
+                                onIncrease={() => this.handleAddBtn(item, true)}
+                                onDecrease={() =>
+                                  this.handleAddBtn(item, false)
+                                }
                                 // value={this.state.number}
-                                onChange={(num) => {
-                                  storedQty = num;
-                                  console.log(num);
-                                  console.log("stored qty -" +storedQty)
-                                }}
+                                // onChange={(num) => {
+                                //   storedQty = num;
+                                //   console.log(num);
+                                //   console.log('stored qty -' + storedQty);
+                                // }}
                               />
                             </Button>
                           ) : (
                             <Button
                               bordered
                               style={styles.AddButtonStyle}
-                              onPress={() => this.setState({isAdded: true})}>
+                              onPress={() => {
+                                console.log('on press of add button');
+                                this.setState({
+                                  isAdded: true,
+                                });
+                                this.handleAddBtn(item, true);
+                              }}>
                               <Text style={styles.addStyle}>ADD</Text>
                             </Button>
                           )}

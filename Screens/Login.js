@@ -12,22 +12,26 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo from '@react-native-community/netinfo';
 
 let responseJson;
 let responseErrorMessage;
 let responseJsonresponsevalue;
 export default class Login extends React.Component {
   constructor(props) {
+
     super(props);
+    this.toggleSwitch = this.toggleSwitch.bind(this);
+
     this.state = {
       mobile: '',
       password: '',
+      showPassword:true
     };
   }
-
-
-
+  toggleSwitch() {
+    this.setState({ showPassword: !this.state.showPassword });
+  }
 
   async onLoginPress() {
     const {mobile, password} = this.state;
@@ -37,33 +41,26 @@ export default class Login extends React.Component {
         backgroundColor: 'red',
         duration: Snackbar.LENGTH_SHORT,
       });
-    } 
-    else 
-    if(mobile.length<=0 && password.length<=0){
+    } else if (mobile.length <= 0 && password.length <= 0) {
       Snackbar.show({
         text: 'Please enter mobile number and password!!',
         backgroundColor: 'red',
         duration: Snackbar.LENGTH_SHORT,
       });
-    }
-    
-    else if (mobile.length < 10) {
+    } else if (mobile.length < 10) {
       Snackbar.show({
         text: 'Mobile number must not be less than 10 digit!!!!',
         backgroundColor: 'red',
         duration: Snackbar.LENGTH_SHORT,
       });
-    } else if (password == '' ) {
+    } else if (password == '') {
       Snackbar.show({
         text: 'Please enter  password!!',
         backgroundColor: 'red',
         duration: Snackbar.LENGTH_SHORT,
       });
     } else {
-
-
-      await NetInfo.fetch().then(state => {
-
+      await NetInfo.fetch().then((state) => {
         if (state.isConnected == false) {
           // this.setState({ loading: false });
           alert('Please check internet internet connection');
@@ -104,10 +101,9 @@ export default class Login extends React.Component {
 
       //  alert('responseJson  - ' + JSON.stringify(responseJson));
       if (responseJsonresponsevalue == true) {
-        
         this.props.navigation.navigate('Dashboard');
-        this.state.mobile='';
-        this.state.password='';
+        this.state.mobile = '';
+        this.state.password = '';
       } else if (responseJsonresponsevalue == false) {
         Snackbar.show({
           text: responseErrorMessage,
@@ -201,9 +197,16 @@ export default class Login extends React.Component {
                 }}
               />
               <Icon
-                name={`eye-slash`}
-                size={20}
+                style={styles.eyeIconStyle}
+                name={`eye`}
+                size={16}
+                
+                // onPress={this.setState({
+                //      showPassword= !showPassword
+                // }),this.toggleSwitch}
                 color="black"
+                
+                
               />
             </View>
 
@@ -252,6 +255,9 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
+  },
+  eyeIconStyle: {
+    marginRight:20
   },
   logoText: {
     fontSize: 28,
