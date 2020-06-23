@@ -64,7 +64,7 @@ export default class Dashboard extends React.Component {
           console.log('index-' + index);
           if (data.id === stringifiedItem.id) {
             console.log("data.id === stringifiedItem.id");
-            
+
             console.log("stringifiedItem.count"+stringifiedItem.count);
 
           }
@@ -92,10 +92,10 @@ export default class Dashboard extends React.Component {
     }
   };
 
-  retrieveData = async () => {
+ async retrieveData(){
     try {
-      retrivedName = await AsyncStorage.getItem('savedName');
-      console.log('retrivedName  -' + retrivedName);
+      const r = await AsyncStorage.getItem('savedName');
+      console.log('retrivedName  -' + r);
 
       retrivedPassword = await AsyncStorage.getItem('savedPassword');
       console.log('retrivedPassword  -' + retrivedPassword);
@@ -182,8 +182,8 @@ export default class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-    await this.callGetItemListApi();
     await this.retrieveData();
+    await this.callGetItemListApi();
     // await this.retrieveApartmentData();
     await this.callGetProfileAPI();
   }

@@ -6,7 +6,9 @@ import {
   Image,
   StyleSheet,
   TouchableHighlight,
+  Switch,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -19,18 +21,17 @@ let responseErrorMessage;
 let responseJsonresponsevalue;
 export default class Login extends React.Component {
   constructor(props) {
-
     super(props);
     this.toggleSwitch = this.toggleSwitch.bind(this);
 
     this.state = {
       mobile: '',
       password: '',
-      showPassword:true
+      showPassword: true,
     };
   }
   toggleSwitch() {
-    this.setState({ showPassword: !this.state.showPassword });
+    this.setState({showPassword: !this.state.showPassword});
   }
 
   async onLoginPress() {
@@ -190,24 +191,35 @@ export default class Login extends React.Component {
                 style={styles.inputs}
                 placeholder="Enter your password"
                 keyboardType="default"
-                secureTextEntry={true}
+                secureTextEntry={this.state.showPassword}
                 underlineColorAndroid="transparent"
                 onChangeText={(password) => {
                   return this.setState({password});
                 }}
               />
-              <Icon
+              {this.state.showPassword == false ? (
+                <Icon
+                  style={styles.eyeIconStyle}
+                  name={`eye`}
+                  size={16}
+                  onPress={this.toggleSwitch}
+                  color="black"
+                />
+              ) : (
+                <Icon
+                  style={styles.eyeIconStyle}
+                  name={`eye-slash`}
+                  size={16}
+                  onPress={this.toggleSwitch}
+                  color="black"
+                />
+              )}
+
+              {/* <Switch
                 style={styles.eyeIconStyle}
-                name={`eye`}
-                size={16}
-                
-                // onPress={this.setState({
-                //      showPassword= !showPassword
-                // }),this.toggleSwitch}
-                color="black"
-                
-                
-              />
+                onValueChange={this.toggleSwitch}
+                value={!this.state.showPassword}
+              /> */}
             </View>
 
             <TouchableHighlight
@@ -257,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   eyeIconStyle: {
-    marginRight:20
+    marginRight: 20,
   },
   logoText: {
     fontSize: 28,

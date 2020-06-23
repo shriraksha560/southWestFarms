@@ -15,7 +15,6 @@ import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
-
 let responseJson;
 let responseStringify;
 let retrivedName;
@@ -25,6 +24,10 @@ let retrivedMobileNumber;
 export default class Register extends React.Component {
   constructor(props) {
     super(props);
+    this.toggleSwitchPassword = this.toggleSwitchPassword.bind(this);
+    this.toggleSwitchConfirmPassword = this.toggleSwitchConfirmPassword.bind(
+      this,
+    );
 
     this.state = {
       name: '',
@@ -34,8 +37,19 @@ export default class Register extends React.Component {
       dataSource: [],
       showToast: false,
       choosenIndex: 0,
+      showPassword: true,
+      showConfirmPassword: true,
     };
   }
+
+  toggleSwitchPassword() {
+    this.setState({showPassword: !this.state.showPassword});
+  }
+
+  toggleSwitchConfirmPassword() {
+    this.setState({showConfirmPassword: !this.state.showConfirmPassword});
+  }
+
   storeApartmentData = async () => {
     try {
       await AsyncStorage.setItem(
@@ -59,21 +73,20 @@ export default class Register extends React.Component {
   };
 
   storeData = async () => {
-    console.log("console 0");
+    console.log('console 0');
 
     try {
-      console.log("console 1");
+      console.log('console 1');
 
       await AsyncStorage.setItem('savedName', this.state.name);
-      console.log("console 2");
+      console.log('console 2');
       await AsyncStorage.setItem('savedPassword', this.state.password);
       await AsyncStorage.setItem('savedMobileNumber', this.state.mobile);
-      console.log("console 3");
-
+      console.log('console 3');
     } catch (error) {
       alert(error);
 
-      console.log('storeData catch block'+error);
+      console.log('storeData catch block' + error);
     }
   };
 
@@ -302,11 +315,31 @@ export default class Register extends React.Component {
                 style={styles.inputs}
                 placeholder="Enter your password"
                 keyboardType="default"
+                secureTextEntry={this.state.showPassword}
                 underlineColorAndroid="transparent"
                 onChangeText={(password) => {
                   return this.setState({password});
                 }}
               />
+
+              {this.state.showPassword == false ? (
+                <Icon
+                  style={styles.eyeIconStyle}
+                  name={`eye`}
+                  size={16}
+                  secureTextEntry={this.state.showPassword}
+                  onPress={this.toggleSwitchPassword}
+                  color="black"
+                />
+              ) : (
+                <Icon
+                  style={styles.eyeIconStyle}
+                  name={`eye-slash`}
+                  size={16}
+                  onPress={this.toggleSwitchPassword}
+                  color="black"
+                />
+              )}
             </View>
             <View style={styles.inputContainer}>
               <Icon
@@ -320,11 +353,29 @@ export default class Register extends React.Component {
                 style={styles.inputs}
                 placeholder="Confirm your password"
                 keyboardType="default"
+                secureTextEntry={this.state.showConfirmPassword}
                 underlineColorAndroid="transparent"
                 onChangeText={(c_password) => {
                   return this.setState({c_password});
                 }}
               />
+              {this.state.showConfirmPassword == false ? (
+                <Icon
+                  style={styles.eyeIconStyle}
+                  name={`eye`}
+                  size={16}
+                  onPress={this.toggleSwitchConfirmPassword}
+                  color="black"
+                />
+              ) : (
+                <Icon
+                  style={styles.eyeIconStyle}
+                  name={`eye-slash`}
+                  size={16}
+                  onPress={this.toggleSwitchConfirmPassword}
+                  color="black"
+                />
+              )}
             </View>
             {this.state.dataSource.length > 0 ? (
               <View style={styles.pickerViewStyle}>
@@ -398,6 +449,9 @@ const styles = StyleSheet.create({
     // \\width:"500",
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  eyeIconStyle: {
+    marginRight: 20,
   },
   logoStyle: {
     height: 100,
