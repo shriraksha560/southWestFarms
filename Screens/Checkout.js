@@ -31,7 +31,6 @@ let responseJsonStringyfied;
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
-    // qty = this.props.navigation.state.qty;
    this.state = {
       selectedRow: {
         name: '',
@@ -47,8 +46,8 @@ export default class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    var q = this.state.qty;
-    console.log('CHECKOUT PAGE qty  -' + q);
+    let quantity =JSON.stringify(this.props);
+    console.log('CHECKOUT PAGE qyantity  -' + quantity);
   }
 
   render() {

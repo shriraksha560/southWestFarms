@@ -13,7 +13,6 @@ import MyProfile from './Screens/Profile';
 const Stack = createStackNavigator();
 
 export default class App extends React.Component {
-  
   constructor() {
     super();
     this.state = {
@@ -40,7 +39,7 @@ export default class App extends React.Component {
 
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Dashboard"
           screenOptions={({route, navigation}) => ({
             gestureEnabled: true,
             cardOverlayEnabled: true,

@@ -44,6 +44,7 @@ export default class Dashboard extends React.Component {
       dataSource: [],
       profile: [],
       userId: '',
+      checkOutData: [],
       isAdded: false,
       storedQty: '',
       isModalVisible: false,
@@ -55,28 +56,50 @@ export default class Dashboard extends React.Component {
     console.log('handleAddBtn item -' + stringifiedItem);
     console.log('handleAddBtn value-' + value);
     let newArray = [];
-    if (value) {
-      newArray.push(stringifiedItem);
-      console.log('New array length-' + newArray.length);
-      if (newArray.length > 0) {
-        newArray.map((data, index) => {
-          console.log('data-' + data);
-          console.log('index-' + index);
-          if (data.id === stringifiedItem.id) {
-            console.log("data.id === stringifiedItem.id");
-
-            console.log("stringifiedItem.count"+stringifiedItem.count);
-
-          }
-          else{
-            console.log("data.id != stringifiedItem.id");
-
-          }
-        });
+    if (this.state.checkOutData.length > 0) {
+      let objIndex = this.state.checkOutData.findIndex(
+        (obj) => obj.id === item.id,
+      );
+      console.log('obj ' + objIndex);
+      if (objIndex == -1) {
+        newArray.push(stringifiedItem);
+      } else {
+        if (
+          this.state.checkOutData.map((data, index) => {
+            if (data.id == stringifiedItem.id) {
+              // this.state.checkOutData[index].count = data.count + 1;
+            }
+          })
+        );
       }
+
+      // let isExist = this.state.checkOutData.Contains(stringifiedItem);
+      // console.log('isExist -' + isExist);
+      // newArray.push(stringifiedItem);
+      // console.log('New array length-' + newArray.length);
+      // if (newArray.length > 0) {
+      //   newArray.map((data, index) => {
+      //     console.log('data-' + data);
+      //     console.log('index-' + index);
+      //     if (data.id === stringifiedItem.id) {
+      //       console.log('data.id === stringifiedItem.id');
+
+      //       console.log('stringifiedItem.count' + stringifiedItem.count);
+      //     } else {
+      //       console.log('data.id != stringifiedItem.id');
+      //     }
+      //   });
+      // }
     } else {
-      console.log('value is null/false');
+      stringifiedItem.count = 1;
+
+      newArray.push(stringifiedItem);
+      console.log('else block');
     }
+    this.setState({
+      checkOutData: newArray,
+    });
+    console.log('checkOutData -' + this.state.checkOutData);
   };
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
@@ -92,10 +115,10 @@ export default class Dashboard extends React.Component {
     }
   };
 
- async retrieveData(){
+  retrieveData = async () => {
     try {
-      const r = await AsyncStorage.getItem('savedName');
-      console.log('retrivedName  -' + r);
+      retrivedName = await AsyncStorage.getItem('savedName');
+      console.log('retrivedName  -' + retrivedName);
 
       retrivedPassword = await AsyncStorage.getItem('savedPassword');
       console.log('retrivedPassword  -' + retrivedPassword);
@@ -182,7 +205,10 @@ export default class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-    await this.retrieveData();
+    setTimeout(async () =>{
+      await this.retrieveData()
+      },5000)
+    // await this.retrieveData();
     await this.callGetItemListApi();
     // await this.retrieveApartmentData();
     await this.callGetProfileAPI();
@@ -196,6 +222,7 @@ export default class Dashboard extends React.Component {
   render() {
     console.log('datasource--' + this.state.dataSource);
     const navigation = this.props.navigation;
+    console.log('checkout data' + this.state.checkOutData);
 
     return (
       <Container>
@@ -321,6 +348,7 @@ export default class Dashboard extends React.Component {
                                 min={1}
                                 step={1}
                                 width={100}
+                                buttonStyle={styles.buttonStyle}
                                 height={40}
                                 colorLeft="#0FA521"
                                 colorRight="#0FA521"
@@ -363,9 +391,11 @@ export default class Dashboard extends React.Component {
         <Button
           block
           style={styles.checkoutButtonStyle}
-          // onPress={this.props.navigation.navigate('Checkout', {
-          //   qty: this.state.storedQty,
-          // })}
+          onPress={() =>
+            this.props.navigation.navigate('Checkout', {
+              qty: this.state.checkoutData,
+            })
+          }
         >
           <Text
             style={{
@@ -391,14 +421,18 @@ const styles = StyleSheet.create({
     // marginLeft: 65
   },
   spinnerStyle: {
-    marginLeft: 2,
-    marginRight: 9,
+    marginLeft: 5,
   },
   buttonCloseStyle: {
     height: 35,
     width: 70,
     marginLeft: 40,
     marginTop: 10,
+  },
+  buttonStyle: {
+    height: 30,
+    width: 30,
+    marginTop: 6,
   },
   cardStyle: {
     //padding: 50,
