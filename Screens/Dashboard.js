@@ -25,7 +25,7 @@ import InputSpinner from 'react-native-input-spinner';
 import Modal from 'react-native-modal';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
-import Register from './Register';
+// import Utils from '../Screens/Utils';
 let response;
 let storedQty;
 let responseJson;
@@ -101,6 +101,8 @@ export default class Dashboard extends React.Component {
     });
     console.log('checkOutData -' + this.state.checkOutData);
   };
+
+  
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
@@ -205,10 +207,13 @@ export default class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-    setTimeout(async () =>{
-      await this.retrieveData()
-      },5000)
+    // setTimeout(async () => {
+    //   await this.retrieveData();
+    // }, 5000);
     // await this.retrieveData();
+    AsyncStorage.getItem("savedName").then((value) => {
+      alert(value);
+  }).done();
     await this.callGetItemListApi();
     // await this.retrieveApartmentData();
     await this.callGetProfileAPI();
@@ -318,28 +323,30 @@ export default class Dashboard extends React.Component {
                       cardElevation={2}
                       cardMaxElevation={2}
                       cornerRadius={10}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-evenly',
-                        }}>
+                      <View style={{flexDirection: 'row'}}>
                         <View>
-                          <Image
-                            style={styles.productsIconStyle}
-                            source={{
-                              uri: `${item.imageUrl}`,
-                            }}
-                          />
+                          <View>
+                            <Image
+                              style={styles.productsIconStyle}
+                              source={{
+                                uri: `${item.imageUrl}`,
+                              }}
+                            />
+                          </View>
                         </View>
-                        <View style={{alignItems: 'flex-start'}}>
-                          <Text style={styles.PnameStyle}>{item.title}</Text>
-                          <Text style={styles.qtyStyle}>
-                            {item.quantity}
-                            {item.unit}
-                          </Text>
-                          <Text style={styles.priceStyle}>{item.price}/-</Text>
+                        <View>
+                          <View style={{alignItems: 'flex-start'}}>
+                            <Text style={styles.PnameStyle}>{item.title}</Text>
+                            <Text style={styles.qtyStyle}>
+                              {item.quantity}
+                              {item.unit}
+                            </Text>
+                            <Text style={styles.priceStyle}>
+                              {item.price}/-
+                            </Text>
+                          </View>
                         </View>
-                        <View style={{marginRight: 0}}>
+                        <View style={{justifyContent:'space-evenly'}}>
                           {this.state.isAdded ? (
                             <Button style={styles.AddButtonStyle}>
                               <InputSpinner
@@ -395,8 +402,7 @@ export default class Dashboard extends React.Component {
             this.props.navigation.navigate('Checkout', {
               qty: this.state.checkoutData,
             })
-          }
-        >
+          }>
           <Text
             style={{
               color: 'white',
@@ -433,6 +439,9 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     marginTop: 6,
+  },
+  addContainerStyle: {
+    alignItems: 'flex-start',
   },
   cardStyle: {
     //padding: 50,

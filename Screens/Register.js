@@ -121,13 +121,11 @@ export default class Register extends React.Component {
       //  await AsyncStorage.setItem('savedApartmentList', responseStringify);
 
       console.log('responseJson' + responseJson);
-      if (
-        responseJson.response.length > 0
-          ? this.setState({
+     this.setState({
               dataSource: responseJson.response,
             })
-          : null
-      );
+        
+      
     } catch (error) {
       console.error('catch block : ' + error);
       alert('error : ' + error);

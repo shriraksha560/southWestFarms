@@ -136,24 +136,38 @@ export default class PlaceOrder extends React.Component {
         </Header>
 
         <ScrollView>
-          <Image
-            style={styles.placedIconStyle}
-            source={require('../Assets/Images/placed_right.png')}
-          />
-          <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18}}>
-            Thank you for your order
-          </Text>
-          <Text
-            style={{textAlign: 'center', fontWeight: 'normal', marginTop: 5}}>
-            Your order number is PROD1003.Please wait while we review and
-            approve your order.
-          </Text>
+          <View>
+            <Image
+              style={styles.placedIconStyle}
+              source={require('../Assets/Images/placed_right.png')}
+            />
+            <Text
+              style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18}}>
+              Thank you for your order
+            </Text>
+            <Text
+              style={{textAlign: 'center', fontWeight: 'normal', marginTop: 5}}>
+              Your order number is PROD1003.Please wait while we review and
+              approve your order.
+            </Text>
+          </View>
 
-          {/* <Image style={styles.placedIconStyle} source={require('../Assets/Images/placed_retry.png')} />
-                    <Text style={{ textAlign: 'center', fontWeight: "bold", fontSize: 18 }}>Oops!!! Something went wrong</Text>
-                    <Text style={{ textAlign: 'center', fontWeight: "normal", marginTop: 5 }}>Could not place your order.Check your internet connection and try again!!</Text>
-     
-      */}
+          {/* <View>
+            <Image
+              style={styles.placedIconStyle}
+              source={require('../Assets/Images/placed_retry.png')}
+              // onPress=  {  this.callPlaceOrderApi}
+            />
+            <Text
+              style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18}}>
+              Oops!!! Something went wrong
+            </Text>
+            <Text
+              style={{textAlign: 'center', fontWeight: 'normal', marginTop: 5}}>
+              Could not place your order.Check your internet connection and try
+              again!!
+            </Text>
+          </View> */}
         </ScrollView>
       </Container>
     );

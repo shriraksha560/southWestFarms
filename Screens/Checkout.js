@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableHighlight,
-  TextComponent,
+  TextComponent,FlatList
 } from 'react-native';
 import {
   Container,
@@ -129,6 +129,7 @@ export default class Checkout extends React.Component {
               marginRight: 3,
             }}></View>
         </ScrollView>
+
         <View style={{flexDirection: 'row'}}>
           <Button bordered style={styles.priceButtonStyle}>
             <Text
@@ -163,11 +164,29 @@ const styles = StyleSheet.create({
     //marginTop: 20
   },
   productsIconStyle: {
-    height: 70,
-    width: 80,
-    marginLeft: 20,
-    marginTop: 17,
+    height: 60,
+    width: 70,
+    marginLeft: 5,
+    marginTop: 8,
     marginBottom: 5,
+  },
+  PnameStyle: {
+    marginLeft: 20,
+    fontSize: 15,
+    marginTop: 5,
+  },
+  priceStyle: {
+    marginLeft: 20,
+    marginTop: 5,
+    marginBottom: 3,
+    color: 'green',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  qtyStyle: {
+    marginLeft: 20,
+    fontSize: 15,
+    marginTop: 5,
   },
   itemNameStyle: {
     fontSize: 15,
