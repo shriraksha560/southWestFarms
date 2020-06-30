@@ -34,21 +34,18 @@ export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: '',
+      dataSource: [],
     };
   }
-
   async componentDidMount() {
-   const itemSelected = await this.props.route.params;
-    console.log('itemSelected -' + itemSelected);
+    const itemSelected = this.props.route.params;
+    console.log('itemSelected -' + JSON.stringify(itemSelected));
     this.setState({
-      dataSource: itemSelected,
+      dataSource: itemSelected.itemSelected,
     });
     console.log('setData-' + this.state.dataSource);
     console.log('LENGTH-' + this.state.dataSource.length);
-    }
-
-    
+  }
   async setData() {
     this.setState({
       dataSource: itemSelected,
@@ -56,10 +53,8 @@ export default class Checkout extends React.Component {
     console.log('setData-' + this.state.dataSource);
     console.log('LENGTH-' + this.state.dataSource.length);
   }
-
   render() {
     const navigation = this.props.navigation;
-
     return (
       <Container>
         <Header style={styles.headerStyle} androidStatusBarColor="#0FA521">
@@ -85,7 +80,7 @@ export default class Checkout extends React.Component {
           </Right>
         </Header>
         <ScrollView>
-          {this.state.dataSource.length <= 0 ? (
+          {this.state.dataSource.length != 0 ? (
             (console.log(this.state.dataSource.length),
             (
               <FlatList
@@ -104,14 +99,17 @@ export default class Checkout extends React.Component {
                           }}
                         />
                       </View>
-
                       <View style={{alignItems: 'flex-start'}}>
                         <Text style={styles.PnameStyle}>{item.title}</Text>
-                        <Text style={styles.qtyStyle}>item.quantity</Text>
-                        <Text style={styles.priceStyle}>item.price/-</Text>
-                      </View>
-                      <View>
-                        <Text>hyhfhhhhff</Text>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text style={styles.priceStyle}>{item.price}/-</Text>
+                          <Button
+                            bordered
+                            success
+                            style={styles.qtyButtonStyle}>
+                            <Text> Qty-2</Text>
+                          </Button>
+                        </View>
                       </View>
                     </View>
                   );
@@ -126,7 +124,6 @@ export default class Checkout extends React.Component {
             <Text>this.state.dataSource.length is less than 0</Text>
           )}
         </ScrollView>
-
         <View style={{flexDirection: 'row'}}>
           <Button bordered style={styles.priceButtonStyle}>
             <Text

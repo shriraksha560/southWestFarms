@@ -74,14 +74,13 @@ export default class Dashboard extends React.Component {
     } else {
       // stringifiedItem.count = 1;
 
-       newArray.push(stringifiedItem);
+      newArray.push(item);
       console.log('else block - this.state.checkOutData.length not > 0 ');
-     
+      this.setState({
+        checkOutData: newArray,
+      });
+      console.log('checkOutData  value-' + this.state.checkOutData);
     }
-    this.setState({
-      checkOutData: newArray,
-    });
-    console.log('checkOutData  value-' + this.state.checkOutData);
   };
 
   toggleModal = () => {
