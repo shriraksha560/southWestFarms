@@ -27,11 +27,12 @@ import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 // import Utils from '../Screens/Utils';
 let response;
-let storedQty;
 let responseJson;
 let profileResponseJson;
 let responseJsonStringyfied;
 let retrivedName;
+let storedQty;
+
 let retrivedPassword;
 let retrivedMobileNumber;
 let retrieveApartmentList;
@@ -46,7 +47,6 @@ export default class Dashboard extends React.Component {
       userId: '',
       checkOutData: [],
       isAdded: false,
-      storedQty: '',
       isModalVisible: false,
     };
   }
@@ -56,21 +56,32 @@ export default class Dashboard extends React.Component {
     console.log('handleAddBtn item -' + stringifiedItem);
     let newArray = [];
     if (this.state.checkOutData.length > 0) {
-      // let objIndex = this.state.checkOutData.findIndex(
-      //   (obj) => obj.id === item.id,
-      // );
-      // console.log('obj ' + objIndex);
-      // if (objIndex == -1) {
-      //   newArray.push(stringifiedItem);
-      // } else {
-      //   if (
-      //     this.state.checkOutData.map((data, index) => {
-      //       if (data.id == stringifiedItem.id) {
-      //         // this.state.checkOutData[index].count = data.count + 1;
-      //       }
-      //     })
-      //   );
-      // }
+      
+
+      let objIndex = this.state.checkOutData.findIndex(
+        (obj) => obj.id === item.id,
+      );
+      console.log('obj ' + objIndex);
+      if (objIndex == -1) {
+        newArray.push(item);
+      } else {
+        if (
+          this.state.checkOutData.map((data, index) => {
+            if (data.id == stringifiedItem.id) {
+              console.log("data.id == stringifiedItem.id is same")
+              // this.state.checkOutData[index].count = data.count + 1;
+            }
+            else{
+
+
+              this.setState({
+                checkOutData: newArray,
+              });
+              console.log(' else checkOutData  value-' + this.state.checkOutData);
+            }
+          })
+        );
+      }
     } else {
       // stringifiedItem.count = 1;
 
@@ -340,11 +351,12 @@ export default class Dashboard extends React.Component {
                                   this.handleAddBtn(item, false)
                                 }
                                 // value={this.state.number}
-                                // onChange={(num) => {
-                                //   storedQty = num;
-                                //   console.log(num);
-                                //   console.log('stored qty -' + storedQty);
-                                // }}
+                                onChange={(num) => {
+                                  this.setState({storedQty: num});
+
+                                  console.log(num);
+                                  console.log('stored qty -' + storedQty);
+                                }}
                               />
                             </Button>
                           ) : (
@@ -376,6 +388,7 @@ export default class Dashboard extends React.Component {
           onPress={() =>
             this.props.navigation.navigate('Checkout', {
               itemSelected: this.state.checkOutData,
+              selectedQty: this.state.storedQty,
             })
           }>
           <Text

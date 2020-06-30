@@ -35,6 +35,7 @@ export default class Checkout extends React.Component {
     super(props);
     this.state = {
       dataSource: [],
+      q: '',
     };
   }
   async componentDidMount() {
@@ -43,6 +44,11 @@ export default class Checkout extends React.Component {
     this.setState({
       dataSource: itemSelected.itemSelected,
     });
+    this.setState({
+      q:itemSelected.selectedQty,
+    });
+    console.log('qty got from dashboard to  checkout-' + this.state.q);
+
     console.log('setData-' + this.state.dataSource);
     console.log('LENGTH-' + this.state.dataSource.length);
   }
@@ -107,7 +113,9 @@ export default class Checkout extends React.Component {
                             bordered
                             success
                             style={styles.qtyButtonStyle}>
-                            <Text> Qty-2</Text>
+                            <Text style={{fontSize:18}}> {this.state.q}</Text>
+                            <Text>{item.unit}</Text>
+
                           </Button>
                         </View>
                       </View>
@@ -209,6 +217,8 @@ const styles = StyleSheet.create({
   qtyButtonStyle: {
     height: 30,
     width: 50,
+    flexDirection:'row',
+    justifyContent:'space-around',
     marginLeft: 120,
   },
 });
