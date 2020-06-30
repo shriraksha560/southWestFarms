@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Image,
   TouchableHighlight,
-  TextComponent,FlatList
+  TextComponent,
+  FlatList,
+  SafeAreaView,
 } from 'react-native';
 import {
   Container,
@@ -31,23 +33,28 @@ let responseJsonStringyfied;
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
-   this.state = {
-      selectedRow: {
-        name: '',
-        price: '',
-        category: '',
-      },
-      dataSource: [],
+    this.state = {
+      dataSource: '',
     };
-    this.getRow = this.getRow.bind(this);
-  }
-  getRow(row) {
-    this.setState({selectedRow: row});
   }
 
-  componentDidMount() {
-    let quantity =JSON.stringify(this.props);
-    console.log('CHECKOUT PAGE qyantity  -' + quantity);
+  async componentDidMount() {
+   const itemSelected = await this.props.route.params;
+    console.log('itemSelected -' + itemSelected);
+    this.setState({
+      dataSource: itemSelected,
+    });
+    console.log('setData-' + this.state.dataSource);
+    console.log('LENGTH-' + this.state.dataSource.length);
+    }
+
+    
+  async setData() {
+    this.setState({
+      dataSource: itemSelected,
+    });
+    console.log('setData-' + this.state.dataSource);
+    console.log('LENGTH-' + this.state.dataSource.length);
   }
 
   render() {
@@ -78,56 +85,46 @@ export default class Checkout extends React.Component {
           </Right>
         </Header>
         <ScrollView>
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              style={styles.productsIconStyle}
-              source={require('../Assets/Images/brocolli.png')}
-            />
-            <View style={styles.itemViewStyle}>
-              <Text style={styles.itemNameStyle}>Romaine Lettuce</Text>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.itemPriceStyle}>1500/-</Text>
-                <Button bordered success style={styles.qtyButtonStyle}>
-                  <Text> Qty-2</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomColor: '#DFEDDF',
-              borderBottomWidth: 1,
-              marginTop: 3,
-              marginBottom: 3,
-              marginLeft: 6,
-              marginRight: 3,
-            }}></View>
+          {this.state.dataSource.length <= 0 ? (
+            (console.log(this.state.dataSource.length),
+            (
+              <FlatList
+                data={this.state.dataSource}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item, index}) => {
+                  console.log('item --' + item);
+                  console.log('index----' + index);
+                  return (
+                    <View style={{flexDirection: 'row'}}>
+                      <View>
+                        <Image
+                          style={styles.productsIconStyle}
+                          source={{
+                            uri: `${item.imageUrl}`,
+                          }}
+                        />
+                      </View>
 
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              style={styles.productsIconStyle}
-              source={require('../Assets/Images/brocolli.png')}
-            />
-
-            <View style={styles.itemViewStyle}>
-              <Text style={styles.itemNameStyle}>Romaine Lettuce</Text>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.itemPriceStyle}>1500/-</Text>
-                <Button bordered success style={styles.qtyButtonStyle}>
-                  <Text> Qty-2</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomColor: '#DFEDDF',
-              borderBottomWidth: 1,
-              marginTop: 3,
-              marginBottom: 3,
-              marginLeft: 6,
-              marginRight: 3,
-            }}></View>
+                      <View style={{alignItems: 'flex-start'}}>
+                        <Text style={styles.PnameStyle}>{item.title}</Text>
+                        <Text style={styles.qtyStyle}>item.quantity</Text>
+                        <Text style={styles.priceStyle}>item.price/-</Text>
+                      </View>
+                      <View>
+                        <Text>hyhfhhhhff</Text>
+                      </View>
+                    </View>
+                  );
+                }}
+                keyExtractor={(item) => {
+                  console.log('item value' + item);
+                  item.value;
+                }}
+              />
+            ))
+          ) : (
+            <Text>this.state.dataSource.length is less than 0</Text>
+          )}
         </ScrollView>
 
         <View style={{flexDirection: 'row'}}>

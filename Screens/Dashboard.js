@@ -54,55 +54,36 @@ export default class Dashboard extends React.Component {
   handleAddBtn = (item, value) => {
     let stringifiedItem = JSON.stringify(item);
     console.log('handleAddBtn item -' + stringifiedItem);
-    console.log('handleAddBtn value-' + value);
     let newArray = [];
     if (this.state.checkOutData.length > 0) {
-      let objIndex = this.state.checkOutData.findIndex(
-        (obj) => obj.id === item.id,
-      );
-      console.log('obj ' + objIndex);
-      if (objIndex == -1) {
-        newArray.push(stringifiedItem);
-      } else {
-        if (
-          this.state.checkOutData.map((data, index) => {
-            if (data.id == stringifiedItem.id) {
-              // this.state.checkOutData[index].count = data.count + 1;
-            }
-          })
-        );
-      }
-
-      // let isExist = this.state.checkOutData.Contains(stringifiedItem);
-      // console.log('isExist -' + isExist);
-      // newArray.push(stringifiedItem);
-      // console.log('New array length-' + newArray.length);
-      // if (newArray.length > 0) {
-      //   newArray.map((data, index) => {
-      //     console.log('data-' + data);
-      //     console.log('index-' + index);
-      //     if (data.id === stringifiedItem.id) {
-      //       console.log('data.id === stringifiedItem.id');
-
-      //       console.log('stringifiedItem.count' + stringifiedItem.count);
-      //     } else {
-      //       console.log('data.id != stringifiedItem.id');
-      //     }
-      //   });
+      // let objIndex = this.state.checkOutData.findIndex(
+      //   (obj) => obj.id === item.id,
+      // );
+      // console.log('obj ' + objIndex);
+      // if (objIndex == -1) {
+      //   newArray.push(stringifiedItem);
+      // } else {
+      //   if (
+      //     this.state.checkOutData.map((data, index) => {
+      //       if (data.id == stringifiedItem.id) {
+      //         // this.state.checkOutData[index].count = data.count + 1;
+      //       }
+      //     })
+      //   );
       // }
     } else {
-      stringifiedItem.count = 1;
+      // stringifiedItem.count = 1;
 
-      newArray.push(stringifiedItem);
-      console.log('else block');
+       newArray.push(stringifiedItem);
+      console.log('else block - this.state.checkOutData.length not > 0 ');
+     
     }
     this.setState({
       checkOutData: newArray,
     });
-    console.log('checkOutData -' + this.state.checkOutData);
+    console.log('checkOutData  value-' + this.state.checkOutData);
   };
 
-  
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
@@ -211,12 +192,10 @@ export default class Dashboard extends React.Component {
     //   await this.retrieveData();
     // }, 5000);
     // await this.retrieveData();
-    AsyncStorage.getItem("savedName").then((value) => {
-      alert(value);
-  }).done();
+
     await this.callGetItemListApi();
     // await this.retrieveApartmentData();
-    await this.callGetProfileAPI();
+    // await this.callGetProfileAPI();
   }
 
   async clearAsync() {
@@ -227,7 +206,7 @@ export default class Dashboard extends React.Component {
   render() {
     console.log('datasource--' + this.state.dataSource);
     const navigation = this.props.navigation;
-    console.log('checkout data' + this.state.checkOutData);
+    // console.log('checkout data' + this.state.checkOutData);
 
     return (
       <Container>
@@ -323,30 +302,28 @@ export default class Dashboard extends React.Component {
                       cardElevation={2}
                       cardMaxElevation={2}
                       cornerRadius={10}>
-                      <View style={{flexDirection: 'row'}}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                        }}>
                         <View>
-                          <View>
-                            <Image
-                              style={styles.productsIconStyle}
-                              source={{
-                                uri: `${item.imageUrl}`,
-                              }}
-                            />
-                          </View>
+                          <Image
+                            style={styles.productsIconStyle}
+                            source={{
+                              uri: `${item.imageUrl}`,
+                            }}
+                          />
                         </View>
-                        <View>
-                          <View style={{alignItems: 'flex-start'}}>
-                            <Text style={styles.PnameStyle}>{item.title}</Text>
-                            <Text style={styles.qtyStyle}>
-                              {item.quantity}
-                              {item.unit}
-                            </Text>
-                            <Text style={styles.priceStyle}>
-                              {item.price}/-
-                            </Text>
-                          </View>
+                        <View style={{alignItems: 'flex-start'}}>
+                          <Text style={styles.PnameStyle}>{item.title}</Text>
+                          <Text style={styles.qtyStyle}>
+                            {item.quantity}
+                            {item.unit}
+                          </Text>
+                          <Text style={styles.priceStyle}>{item.price}/-</Text>
                         </View>
-                        <View style={{justifyContent:'space-evenly'}}>
+                        <View style={{marginRight: 0}}>
                           {this.state.isAdded ? (
                             <Button style={styles.AddButtonStyle}>
                               <InputSpinner
@@ -376,7 +353,6 @@ export default class Dashboard extends React.Component {
                               bordered
                               style={styles.AddButtonStyle}
                               onPress={() => {
-                                console.log('on press of add button');
                                 this.setState({
                                   isAdded: true,
                                 });
@@ -400,7 +376,7 @@ export default class Dashboard extends React.Component {
           style={styles.checkoutButtonStyle}
           onPress={() =>
             this.props.navigation.navigate('Checkout', {
-              qty: this.state.checkoutData,
+              itemSelected: this.state.checkOutData,
             })
           }>
           <Text

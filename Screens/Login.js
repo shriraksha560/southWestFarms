@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import fonts from '../Variables/fonts';
 
 let responseJson;
 let responseErrorMessage;
@@ -278,6 +279,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#0FA521',
     fontWeight: 'bold',
+    //fontFamily:fonts.fontBold
   },
   inputContainer: {
     borderBottomColor: 'transparent',
