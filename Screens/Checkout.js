@@ -35,7 +35,7 @@ export default class Checkout extends React.Component {
     super(props);
     this.state = {
       dataSource: [],
-      q: '',
+      q: [],
     };
   }
   async componentDidMount() {

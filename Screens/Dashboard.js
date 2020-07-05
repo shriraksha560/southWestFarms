@@ -56,39 +56,49 @@ export default class Dashboard extends React.Component {
     console.log('handleAddBtn item -' + stringifiedItem);
     let newArray = [];
     if (this.state.checkOutData.length > 0) {
-      
-
       let objIndex = this.state.checkOutData.findIndex(
-        (obj) => obj.id === item.id,
+        (obj) => obj.id == item.id,
       );
       console.log('obj ' + objIndex);
       if (objIndex == -1) {
         newArray.push(item);
+        this.setState({
+          checkOutData: [...this.state.checkOutData, ...newArray],
+        });
       } else {
-        if (
-          this.state.checkOutData.map((data, index) => {
-            if (data.id == stringifiedItem.id) {
-              console.log("data.id == stringifiedItem.id is same")
-              // this.state.checkOutData[index].count = data.count + 1;
-            }
-            else{
+        this.state.checkOutData.map((data, index) => {
+          console.log('data : ' + data);
+          if (data.id == item.id) {
+            console.log('data.id == item.id is same');
+            // this.state.checkOutData[index].count = data.count + 1;
+          }
+          // else {
+          //   this.setState({
+          //     checkOutData: [...this.state.checkOutData, ...newArray]
+          //   });
+          //   console.log( ' else checkOutData  value-' + this.state.checkOutData, );
 
-
-              this.setState({
-                checkOutData: newArray,
-              });
-              console.log(' else checkOutData  value-' + this.state.checkOutData);
-            }
-          })
-        );
+          //   console.log("comed to else");
+          // }
+        });
       }
+
+      // newArray.push(item);
+      // this.setState({
+      //     checkOutData: [...this.state.checkOutData, ...newArray]
+
+      //    });
+      // console.log("if block after pushing")
     } else {
       // stringifiedItem.count = 1;
 
       newArray.push(item);
+      console.log('new array in else  newArray: ' + JSON.stringify(newArray));
+      console.log('new array in else item : ' + JSON.stringify(item));
+
       console.log('else block - this.state.checkOutData.length not > 0 ');
       this.setState({
-        checkOutData: newArray,
+        checkOutData: [...this.state.checkOutData, ...newArray],
       });
       console.log('checkOutData  value-' + this.state.checkOutData);
     }
@@ -388,7 +398,7 @@ export default class Dashboard extends React.Component {
           onPress={() =>
             this.props.navigation.navigate('Checkout', {
               itemSelected: this.state.checkOutData,
-              selectedQty: this.state.storedQty,
+              // selectedQty: this.state.storedQty,
             })
           }>
           <Text
