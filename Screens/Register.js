@@ -270,7 +270,7 @@ export default class Register extends React.Component {
           />
 
           <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>Register</Text>
+            <Text style={styles.logoText}>South-West Farm</Text>
             <View style={styles.inputContainer}>
               <Icon
                 name={`user`}

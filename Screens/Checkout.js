@@ -45,7 +45,7 @@ export default class Checkout extends React.Component {
       dataSource: itemSelected.itemSelected,
     });
     this.setState({
-      q:itemSelected.count,
+      q: itemSelected.count,
     });
     console.log('qty got from dashboard to  checkout-' + this.state.q);
 
@@ -96,30 +96,40 @@ export default class Checkout extends React.Component {
                   console.log('item --' + item);
                   console.log('index----' + index);
                   return (
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={styles.productsIconStyle}
-                          source={{
-                            uri: `${item.imageUrl}`,
-                          }}
-                        />
-                      </View>
-                      <View style={{alignItems: 'flex-start'}}>
-                        <Text style={styles.PnameStyle}>{item.title}</Text>
-                        <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.priceStyle}>{item.price}/-</Text>
-                          <Button
-                            bordered
-                            success
-                            style={styles.qtyButtonStyle}>
-                            <Text style={{fontSize:18}}> {this.state.q}</Text>
-                            <Text>{item.unit}</Text>
-
-                          </Button>
+                    <Card
+                      style={styles.cardStyle}
+                      cardElevation={2}
+                      cardMaxElevation={2}
+                      cornerRadius={10}>
+                      <View style={{flexDirection: 'row'}}>
+                        <View>
+                          <Image
+                            style={styles.productsIconStyle}
+                            source={{
+                              uri: `${item.imageUrl}`,
+                            }}
+                          />
+                        </View>
+                        <View style={{alignItems: 'flex-start'}}>
+                          <Text style={styles.PnameStyle}>{item.title}</Text>
+                          <View style={{flexDirection: 'row'}}>
+                            <Text style={styles.priceStyle}>
+                              {item.price}/-
+                            </Text>
+                            <Button
+                              bordered
+                              success
+                              style={styles.qtyButtonStyle}>
+                              <Text style={{fontSize: 18}}>
+                                {' '}
+                                {this.state.q}
+                              </Text>
+                              <Text>{item.unit}</Text>
+                            </Button>
+                          </View>
                         </View>
                       </View>
-                    </View>
+                    </Card>
                   );
                 }}
                 keyExtractor={(item) => {
@@ -172,6 +182,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 5,
   },
+  cardStyle: {
+    //padding: 50,
+    // margin: 10,
+    marginRight: 10,
+    marginTop: 10,
+    marginLeft: 15,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    borderRadius: 7,
+  },
   PnameStyle: {
     marginLeft: 20,
     fontSize: 15,
@@ -217,8 +237,8 @@ const styles = StyleSheet.create({
   qtyButtonStyle: {
     height: 30,
     width: 50,
-    flexDirection:'row',
-    justifyContent:'space-around',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginLeft: 120,
   },
 });

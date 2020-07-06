@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
-import fonts from '../Variables/fonts';
+import { fonts } from '../Variables/fonts';
 
 let responseJson;
 let responseErrorMessage;
@@ -159,7 +159,7 @@ export default class Login extends React.Component {
           />
 
           <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>Login </Text>
+            <Text style={styles.logoText}>South-West Farm </Text>
             <View style={styles.inputContainer}>
               <Icon
                 name={`mobile`}
@@ -276,10 +276,10 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginTop: -30,
     marginBottom: 20,
-    fontWeight: '600',
+    //fontWeight: '600',
     color: '#0FA521',
     fontWeight: 'bold',
-    //fontFamily:fonts.fontBold
+  //  fontFamily:fonts.fontBold
   },
   inputContainer: {
     borderBottomColor: 'transparent',
@@ -323,6 +323,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     justifyContent: 'center',
     fontWeight: 'bold',
+    //fontFamily:fonts.fontBold
+
   },
   forgotStyles: {
     color: 'white',

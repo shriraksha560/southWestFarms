@@ -75,8 +75,7 @@ export default class Dashboard extends React.Component {
           if (data.id == item.id) {
             console.log('data.id == item.id is same');
             // this.state.checkOutData[index].count = data.count + 1;
-            this.state.checkOutData[index].count =
-              this.state.checkOutData[index].count + 1;
+            this.state.checkOutData[index].count =this.state.checkOutData[index].count + 1;
             console.log('count : ' + this.state.checkOutData[index].count);
           }
         });
@@ -420,8 +419,8 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     marginTop: 6,
-    marginLeft: 4,
-    marginRight: 7,
+    marginLeft: 2,
+    marginRight: 6,
   },
   addContainerStyle: {
     alignItems: 'flex-start',
