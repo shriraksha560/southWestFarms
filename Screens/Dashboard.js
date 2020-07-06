@@ -25,6 +25,7 @@ import InputSpinner from 'react-native-input-spinner';
 import Modal from 'react-native-modal';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
+import AppAsyncStorage from '../AsyncStorage/AppAsyncStorage';
 // import Utils from '../Screens/Utils';
 let response;
 let responseJson;
@@ -52,14 +53,16 @@ export default class Dashboard extends React.Component {
   }
 
   handleAddBtn = (item, value) => {
+    console.log('item :' + item);
+    console.log('value :' + value);
+    console.log('strigified item :' + JSON.stringify(item));
     let stringifiedItem = JSON.stringify(item);
-    console.log('handleAddBtn item -' + stringifiedItem);
     let newArray = [];
     if (this.state.checkOutData.length > 0) {
       let objIndex = this.state.checkOutData.findIndex(
         (obj) => obj.id == item.id,
       );
-      console.log('obj ' + objIndex);
+      console.log('obj :' + objIndex);
       if (objIndex == -1) {
         newArray.push(item);
         this.setState({
@@ -68,39 +71,21 @@ export default class Dashboard extends React.Component {
       } else {
         this.state.checkOutData.map((data, index) => {
           console.log('data : ' + data);
+          console.log('stringified data :' + JSON.stringify(data));
           if (data.id == item.id) {
             console.log('data.id == item.id is same');
             // this.state.checkOutData[index].count = data.count + 1;
+            this.state.checkOutData[index].count =
+              this.state.checkOutData[index].count + 1;
+            console.log('count : ' + this.state.checkOutData[index].count);
           }
-          // else {
-          //   this.setState({
-          //     checkOutData: [...this.state.checkOutData, ...newArray]
-          //   });
-          //   console.log( ' else checkOutData  value-' + this.state.checkOutData, );
-
-          //   console.log("comed to else");
-          // }
         });
       }
-
-      // newArray.push(item);
-      // this.setState({
-      //     checkOutData: [...this.state.checkOutData, ...newArray]
-
-      //    });
-      // console.log("if block after pushing")
     } else {
-      // stringifiedItem.count = 1;
-
       newArray.push(item);
-      console.log('new array in else  newArray: ' + JSON.stringify(newArray));
-      console.log('new array in else item : ' + JSON.stringify(item));
-
-      console.log('else block - this.state.checkOutData.length not > 0 ');
       this.setState({
         checkOutData: [...this.state.checkOutData, ...newArray],
       });
-      console.log('checkOutData  value-' + this.state.checkOutData);
     }
   };
 
@@ -120,16 +105,16 @@ export default class Dashboard extends React.Component {
 
   retrieveData = async () => {
     try {
-      retrivedName = await AsyncStorage.getItem('savedName');
+      retrivedName = await AppAsyncStorage.get('savedName');
       console.log('retrivedName  -' + retrivedName);
 
-      retrivedPassword = await AsyncStorage.getItem('savedPassword');
+      retrivedPassword = await AppAsyncStorage.get('savedPassword');
       console.log('retrivedPassword  -' + retrivedPassword);
 
-      retrivedMobileNumber = await AsyncStorage.getItem('savedMobileNumber');
+      retrivedMobileNumber = await AppAsyncStorage.get('savedMobileNumber');
       console.log('retrivedMobileNumber   -' + retrivedMobileNumber);
     } catch (error) {
-      console.log('retieved catch block');
+      console.log('retieved catch block :' + error);
     }
   };
 
@@ -208,10 +193,10 @@ export default class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-    // setTimeout(async () => {
+    setTimeout(async () => {
+      await this.retrieveData();
+    }, 3000);
     //   await this.retrieveData();
-    // }, 5000);
-    // await this.retrieveData();
 
     await this.callGetItemListApi();
     // await this.retrieveApartmentData();
@@ -219,7 +204,8 @@ export default class Dashboard extends React.Component {
   }
 
   async clearAsync() {
-    clearedAsync = await AsyncStorage.clear();
+    clearedAsync = await AppAsyncStorage.clear();
+
     console.log('clearAsync log' + clearedAsync);
   }
 
@@ -292,7 +278,7 @@ export default class Dashboard extends React.Component {
                         iconLeft
                         style={styles.logoutButtonStyle}
                         justifyContent="space-evenly"
-                        onPress={(clearedAsync = AsyncStorage.clear())}>
+                        onPress={this.clearAsync()}>
                         <Icon
                           name="power-off"
                           style={styles.logoutIconStyle}
@@ -363,9 +349,6 @@ export default class Dashboard extends React.Component {
                                 // value={this.state.number}
                                 onChange={(num) => {
                                   this.setState({storedQty: num});
-
-                                  console.log(num);
-                                  console.log('stored qty -' + storedQty);
                                 }}
                               />
                             </Button>
@@ -398,7 +381,7 @@ export default class Dashboard extends React.Component {
           onPress={() =>
             this.props.navigation.navigate('Checkout', {
               itemSelected: this.state.checkOutData,
-              // selectedQty: this.state.storedQty,
+              //  selectedQty: this.state.storedQty,
             })
           }>
           <Text
@@ -425,7 +408,7 @@ const styles = StyleSheet.create({
     // marginLeft: 65
   },
   spinnerStyle: {
-    marginLeft: 5,
+    justifyContent: 'center',
   },
   buttonCloseStyle: {
     height: 35,
@@ -434,9 +417,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonStyle: {
-    height: 30,
-    width: 30,
+    height: 28,
+    width: 28,
     marginTop: 6,
+    marginLeft: 4,
+    marginRight: 7,
   },
   addContainerStyle: {
     alignItems: 'flex-start',

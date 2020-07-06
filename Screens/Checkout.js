@@ -45,7 +45,7 @@ export default class Checkout extends React.Component {
       dataSource: itemSelected.itemSelected,
     });
     this.setState({
-      q:itemSelected.selectedQty,
+      q:itemSelected.count,
     });
     console.log('qty got from dashboard to  checkout-' + this.state.q);
 

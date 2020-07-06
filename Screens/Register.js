@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import AppAsyncStorage from '../AsyncStorage/AppAsyncStorage';
 
 let responseJson;
 let responseStringify;
@@ -73,18 +74,17 @@ export default class Register extends React.Component {
   };
 
   storeData = async () => {
-    console.log('console 0');
 
     try {
-      console.log('console 1');
 
-      await AsyncStorage.setItem('savedName', this.state.name);
-      console.log('console 2');
-      await AsyncStorage.setItem('savedPassword', this.state.password);
-      await AsyncStorage.setItem('savedMobileNumber', this.state.mobile);
-      console.log('console 3');
+     await  AppAsyncStorage.save('savedName', `${this.state.name}`);
+     await  AppAsyncStorage.save('savedPassword', `${this.state.password}`);
+     await  AppAsyncStorage.save('savedMobileNumber', `${this.state.mobile}`);
+
+      // await AsyncStorage.setItem('savedName', this.state.name);
+      // await AsyncStorage.setItem('savedPassword', this.state.password);
+      // await AsyncStorage.setItem('savedMobileNumber', this.state.mobile);
     } catch (error) {
-      alert(error);
 
       console.log('storeData catch block' + error);
     }
@@ -92,18 +92,22 @@ export default class Register extends React.Component {
 
   retrieveData = async () => {
     try {
-      retrivedName = await AsyncStorage.getItem('savedName');
+      retrivedName = await AppAsyncStorage.get('savedName');
       console.log('retrivedName  -' + retrivedName);
 
-      retrivedPassword = await AsyncStorage.getItem('savedPassword');
+      retrivedPassword = await AppAsyncStorage.get('savedPassword');
       console.log('retrivedPassword  -' + retrivedPassword);
 
-      retrivedMobileNumber = await AsyncStorage.getItem('savedMobileNumber');
+      retrivedMobileNumber = await AppAsyncStorage.get('savedMobileNumber');
       console.log('retrivedMobileNumber   -' + retrivedMobileNumber);
     } catch (error) {
-      console.log('retieved catch block');
+      console.log('retieved catch block :'+error);
     }
   };
+
+
+  
+
 
   async callGetApartMentList() {
     try {
@@ -219,6 +223,7 @@ export default class Register extends React.Component {
         });
         this.storeData();
         this.retrieveData();
+        // readData();
         // this.storeApartmentData();
         this.props.navigation.navigate('Login');
       } else if (response.status == 500) {
