@@ -52,13 +52,9 @@ export default class Checkout extends React.Component {
     console.log('setData-' + this.state.dataSource);
     console.log('LENGTH-' + this.state.dataSource.length);
   }
-  async setData() {
-    this.setState({
-      dataSource: itemSelected,
-    });
-    console.log('setData-' + this.state.dataSource);
-    console.log('LENGTH-' + this.state.dataSource.length);
-  }
+
+  async calculatePrice() {}
+
   render() {
     const navigation = this.props.navigation;
     return (
@@ -112,16 +108,21 @@ export default class Checkout extends React.Component {
                         </View>
                         <View style={{alignItems: 'flex-start'}}>
                           <Text style={styles.PnameStyle}>{item.title}</Text>
+                          {/* <Text style={styles.PnameStyle}>
+                            {item.quantity}
+                            {item.unit}
+                          </Text> */}
+
                           <View style={{flexDirection: 'row'}}>
                             <Text style={styles.priceStyle}>
-                              {item.price}/-
+                              {item.price * item.count}/-
                             </Text>
                             <Button
                               bordered
                               success
                               style={styles.qtyButtonStyle}>
-                              <Text style={{fontSize: 18}}> {item.count}</Text>
-                              <Text>{item.unit}</Text>
+                              <Text style={{fontSize: 15}}>{item.count}</Text>
+                              <Text style={{fontSize: 15}}>{item.unit}</Text>
                             </Button>
                           </View>
                         </View>
@@ -148,8 +149,7 @@ export default class Checkout extends React.Component {
                 fontWeight: 'bold',
                 textAlign: 'center',
               }}>
-              {' '}
-              Total - 3000/-
+              Total-
             </Text>
           </Button>
           <Button
@@ -233,9 +233,9 @@ const styles = StyleSheet.create({
   },
   qtyButtonStyle: {
     height: 30,
-    width: 50,
+    width: 70,
+    justifyContent: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
     marginLeft: 120,
   },
 });
