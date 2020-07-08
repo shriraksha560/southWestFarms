@@ -120,10 +120,7 @@ export default class Checkout extends React.Component {
                               bordered
                               success
                               style={styles.qtyButtonStyle}>
-                              <Text style={{fontSize: 18}}>
-                                {' '}
-                                {this.state.q}
-                              </Text>
+                              <Text style={{fontSize: 18}}> {item.count}</Text>
                               <Text>{item.unit}</Text>
                             </Button>
                           </View>

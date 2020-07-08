@@ -26,14 +26,14 @@ import Modal from 'react-native-modal';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import AppAsyncStorage from '../AsyncStorage/AppAsyncStorage';
-// import Utils from '../Screens/Utils';
+
 let response;
 let responseJson;
 let profileResponseJson;
 let responseJsonStringyfied;
-let retrivedName;
-let storedQty;
 
+let storedQty;
+let retrivedName;
 let retrivedPassword;
 let retrivedMobileNumber;
 let retrieveApartmentList;
@@ -54,38 +54,28 @@ export default class Dashboard extends React.Component {
 
   handleAddBtn = (item, value) => {
     console.log('item :' + item);
-    console.log('value :' + value);
-    console.log('strigified item :' + JSON.stringify(item));
     let stringifiedItem = JSON.stringify(item);
-    let newArray = [];
-    if (this.state.checkOutData.length > 0) {
-      let objIndex = this.state.checkOutData.findIndex(
-        (obj) => obj.id == item.id,
-      );
-      console.log('obj :' + objIndex);
-      if (objIndex == -1) {
-        newArray.push(item);
-        this.setState({
-          checkOutData: [...this.state.checkOutData, ...newArray],
-        });
-      } else {
-        this.state.checkOutData.map((data, index) => {
-          console.log('data : ' + data);
-          console.log('stringified data :' + JSON.stringify(data));
-          if (data.id == item.id) {
-            console.log('data.id == item.id is same');
-            // this.state.checkOutData[index].count = data.count + 1;
-            this.state.checkOutData[index].count =this.state.checkOutData[index].count + 1;
-            console.log('count : ' + this.state.checkOutData[index].count);
-          }
-        });
+    console.log('stringifiedItem :' + stringifiedItem);
+    const checkOutData = [...this.state.checkOutData];
+    let isItemExist = false;
+    for (let index = 0; index < checkOutData.length; index++) {
+      const data = checkOutData[index];
+      console.log('data :' + JSON.stringify(data));
+      if (data.id === item.id) {
+        console.log('(data.id===item.id');
+        data.count = data.count + 1;
+        console.log('data.count :' + data.count);
+        isItemExist = true;
+        break;
       }
-    } else {
-      newArray.push(item);
-      this.setState({
-        checkOutData: [...this.state.checkOutData, ...newArray],
-      });
     }
+    if (!isItemExist) {
+      item.count = 1;
+      checkOutData.push(item);
+    }
+    this.setState({
+      checkOutData,
+    });
   };
 
   toggleModal = () => {
@@ -104,16 +94,18 @@ export default class Dashboard extends React.Component {
 
   retrieveData = async () => {
     try {
-      retrivedName = await AppAsyncStorage.get('savedName');
-      console.log('retrivedName  -' + retrivedName);
+      const t = await AppAsyncStorage.get('savedName');
+      console.log('retrivedName in dashboard  -' + t);
 
       retrivedPassword = await AppAsyncStorage.get('savedPassword');
-      console.log('retrivedPassword  -' + retrivedPassword);
+      console.log('retrivedPassword in dashboard  -' + retrivedPassword);
 
       retrivedMobileNumber = await AppAsyncStorage.get('savedMobileNumber');
-      console.log('retrivedMobileNumber   -' + retrivedMobileNumber);
+      console.log(
+        'retrivedMobileNumber in dashboard  -' + retrivedMobileNumber,
+      );
     } catch (error) {
-      console.log('retieved catch block :' + error);
+      console.log('retieved catch block in dashboard :' + error);
     }
   };
 
@@ -151,6 +143,8 @@ export default class Dashboard extends React.Component {
     }
   }
   async callGetItemListApi() {
+    await this.retrieveData();
+
     var requestBody = JSON.stringify({
       page: 1,
       size: 5,
@@ -192,14 +186,13 @@ export default class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-    setTimeout(async () => {
-      await this.retrieveData();
-    }, 3000);
+    // setTimeout(async () => {
     //   await this.retrieveData();
+    // }, 3000);
 
     await this.callGetItemListApi();
     // await this.retrieveApartmentData();
-    // await this.callGetProfileAPI();
+    await this.callGetProfileAPI();
   }
 
   async clearAsync() {
