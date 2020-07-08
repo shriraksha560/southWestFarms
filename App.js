@@ -51,6 +51,7 @@ export default class App extends React.Component {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="Profile" component={MyProfile} />
           <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
           <Stack.Screen name="MyProfile" component={MyProfile} />
         </Stack.Navigator>

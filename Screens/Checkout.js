@@ -53,7 +53,19 @@ export default class Checkout extends React.Component {
     console.log('LENGTH-' + this.state.dataSource.length);
   }
 
-  async calculatePrice() {}
+  async calculatePrice(item, index) {
+    console.log('---------calculatePrice---------');
+    console.log('item :' + item);
+    console.log('stringified item :' + JSON.stringify(item));
+    console.log('index :' + index);
+
+    let totalPrice = await item.reduce(function (prev, cur) {
+      console.log(' prev + cur.totalPrice :' + prev + cur.totalPrice);
+      return prev + cur.totalPrice;
+    }, 0);
+
+    console.log('totalPrice:', totalPrice);
+  }
 
   render() {
     const navigation = this.props.navigation;
@@ -141,7 +153,10 @@ export default class Checkout extends React.Component {
           )}
         </ScrollView>
         <View style={{flexDirection: 'row'}}>
-          <Button bordered style={styles.priceButtonStyle}>
+          <Button
+            bordered
+            style={styles.priceButtonStyle}
+            onPress={this.calculatePrice}>
             <Text
               style={{
                 color: 'green',
@@ -149,7 +164,7 @@ export default class Checkout extends React.Component {
                 fontWeight: 'bold',
                 textAlign: 'center',
               }}>
-              Total-
+              Total
             </Text>
           </Button>
           <Button

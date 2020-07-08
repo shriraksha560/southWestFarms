@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   TouchableHighlight,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Container,
@@ -17,6 +18,7 @@ import {
   Title,
   Content,
   DatePicker,
+  Toast,
   Card,
 } from 'native-base';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -223,9 +225,9 @@ export default class Dashboard extends React.Component {
                 name={`user`}
                 size={20}
                 color="white"
-                onPress={this.toggleModal}
+                // onPress={navigation.navigate('Profile')}
               />
-              <Modal isVisible={this.state.isModalVisible}>
+              {/* <Modal isVisible={this.state.isModalVisible}>
                 <View style={styles.modelViewStyle}>
                   <View style={{flexDirection: 'row'}}>
                     <View>
@@ -281,8 +283,8 @@ export default class Dashboard extends React.Component {
                     </View>
                   </View>
                   {/* <Button title="Hide modal" onPress={this.toggleModal} /> */}
-                </View>
-              </Modal>
+              {/* </View>
+              </Modal> */}
             </Button>
           </Right>
         </Header>
@@ -303,7 +305,7 @@ export default class Dashboard extends React.Component {
                       <View
                         style={{
                           flexDirection: 'row',
-                          justifyContent: 'space-around',
+                          justifyContent: 'space-between',
                         }}>
                         <View>
                           <Image
@@ -365,27 +367,60 @@ export default class Dashboard extends React.Component {
               }}
               keyExtractor={(item) => item.value}
             />
-          ) : null}
+          ) : (
+            <View style={{marginTop: 200}}>
+              <ActivityIndicator size="large" color="#0FA521" />
+            </View>
+          )}
         </ScrollView>
-        <Button
-          block
-          style={styles.checkoutButtonStyle}
-          onPress={() =>
-            this.props.navigation.navigate('Checkout', {
-              itemSelected: this.state.checkOutData,
-              //  selectedQty: this.state.storedQty,
-            })
-          }>
-          <Text
-            style={{
-              color: 'white',
-              fontSize: 13,
-              justifyContent: 'center',
-              fontWeight: 'bold',
-            }}>
-            CHECKOUT(1 item)
-          </Text>
-        </Button>
+        {this.state.checkOutData.length > 0 ? (
+          <Button
+            block
+            style={styles.checkoutButtonStyle}
+            onPress={() =>
+              this.props.navigation.navigate('Checkout', {
+                itemSelected: this.state.checkOutData,
+                //  selectedQty: this.state.storedQty,
+              })
+            }>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 13,
+                justifyContent: 'center',
+                fontWeight: 'bold',
+              }}>
+              CHECKOUT
+            </Text>
+          </Button>
+        ) : (
+          <Button
+            block
+            style={styles.checkoutDisabledButtonStyle}
+            onPress={() =>
+              // Toast.show({
+              //   text: 'Please add an item',
+              //   buttonText: 'Okay',
+              //   // position: 'top',
+              // })
+
+              Snackbar.show({
+                text: 'There are no items selected. Please add some items!!!',
+                backgroundColor: 'red',
+                duration: Snackbar.LENGTH_SHORT,
+              })
+            }>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 13,
+                justifyContent: 'center',
+                fontWeight: 'bold',
+              }}>
+              CHECKOUT
+            </Text>
+          </Button>
+        )}
       </Container>
     );
   }
@@ -491,6 +526,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#1B1DAE',
   },
+  checkoutDisabledButtonStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+    backgroundColor: 'grey',
+  },
+
   modelViewStyle: {
     flex: 1,
     backgroundColor: 'white',
