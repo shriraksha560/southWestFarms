@@ -39,6 +39,7 @@ let retrivedName;
 let retrivedPassword;
 let retrivedMobileNumber;
 let retrieveApartmentList;
+let retrievedUserId;
 let clearedAsync;
 
 export default class Dashboard extends React.Component {
@@ -47,26 +48,20 @@ export default class Dashboard extends React.Component {
     this.state = {
       dataSource: [],
       profile: [],
-      userId: '',
+      idUser: '',
       checkOutData: [],
       isAdded: false,
       isModalVisible: false,
     };
   }
 
-  handleAddBtn = (item, value) => {
-    console.log('item :' + item);
-    let stringifiedItem = JSON.stringify(item);
-    console.log('stringifiedItem :' + stringifiedItem);
+  handleAddBtn = (item) => {
     const checkOutData = [...this.state.checkOutData];
     let isItemExist = false;
     for (let index = 0; index < checkOutData.length; index++) {
       const data = checkOutData[index];
-      console.log('data :' + JSON.stringify(data));
       if (data.id === item.id) {
-        console.log('(data.id===item.id');
         data.count = data.count + 1;
-        console.log('data.count :' + data.count);
         isItemExist = true;
         break;
       }
@@ -122,19 +117,22 @@ export default class Dashboard extends React.Component {
       );
 
       profileResponseJson = await response.json();
+
+      let profileResponseJsonStringified = profileResponseJson.response;
+
       console.log(
-        'profileResponseJson callGetProfileAPI ' +
-          JSON.stringify(profileResponseJson),
+        'profileResponseJsonStringified :' + profileResponseJsonStringified,
       );
       this.setState({
-        userId: JSON.stringify(profileResponseJson.userId),
+        idUser: profileResponseJsonStringified.userId,
       });
-      console.log('userId -' + this.state.userId);
+      console.log('idUser -' + this.state.idUser);
+
+      this.storeUserID();
+      this.retrieveUserId();
       responseJsonStringyfied =
         profileResponseJson != null ? profileResponseJson.response : null;
-      // console.log(
-      //   'responseJsonStringyfied' + JSON.stringify(responseJsonStringyfied),
-      // );
+
       this.setState({
         profile:
           responseJsonStringyfied != null ? responseJsonStringyfied : 'null',
@@ -144,6 +142,22 @@ export default class Dashboard extends React.Component {
       alert('error : ' + error);
     }
   }
+
+  storeUserID = async () => {
+    try {
+      await AppAsyncStorage.save('savedUserId', `${this.state.idUser}`);
+    } catch (error) {
+      console.log('storeUserID catch block' + error);
+    }
+  };
+  retrieveUserId = async () => {
+    try {
+      retrievedUserId = await AppAsyncStorage.get('savedUserId');
+      console.log('retrievedUserId  :' + retrievedUserId);
+    } catch (error) {
+      console.log('retrievedUserId catch block :' + error);
+    }
+  };
   async callGetItemListApi() {
     await this.retrieveData();
 
@@ -201,6 +215,7 @@ export default class Dashboard extends React.Component {
     clearedAsync = await AppAsyncStorage.clear();
 
     console.log('clearAsync log' + clearedAsync);
+    this.props.navigation.navigate('Login');
   }
 
   render() {
@@ -213,7 +228,7 @@ export default class Dashboard extends React.Component {
         <Header style={styles.headerStyle} androidStatusBarColor="#0FA521">
           <Left>
             <Button transparent>
-              <Icon name="angle-left" size={30} color="white" />
+              {/* <Icon name="angle-left" size={30} color="white" /> */}
             </Button>
           </Left>
           <Body>
@@ -225,9 +240,9 @@ export default class Dashboard extends React.Component {
                 name={`user`}
                 size={20}
                 color="white"
-                // onPress={navigation.navigate('Profile')}
+                onPress={this.toggleModal}
               />
-              {/* <Modal isVisible={this.state.isModalVisible}>
+              <Modal isVisible={this.state.isModalVisible}>
                 <View style={styles.modelViewStyle}>
                   <View style={{flexDirection: 'row'}}>
                     <View>
@@ -260,19 +275,17 @@ export default class Dashboard extends React.Component {
                           ? this.state.profile.area
                           : ''}{' '}
                       </Text>
-
                       <Text style={styles.cityStyle}>
                         {this.state.profile !== undefined &&
                         this.state.profile !== ''
                           ? this.state.profile.city
                           : ''}{' '}
                       </Text>
-
                       <Button
                         iconLeft
                         style={styles.logoutButtonStyle}
                         justifyContent="space-evenly"
-                        onPress={this.clearAsync()}>
+                        onPress={() => this.clearAsync()}>
                         <Icon
                           name="power-off"
                           style={styles.logoutIconStyle}
@@ -283,8 +296,8 @@ export default class Dashboard extends React.Component {
                     </View>
                   </View>
                   {/* <Button title="Hide modal" onPress={this.toggleModal} /> */}
-              {/* </View>
-              </Modal> */}
+                </View>
+              </Modal>
             </Button>
           </Right>
         </Header>
@@ -305,7 +318,7 @@ export default class Dashboard extends React.Component {
                       <View
                         style={{
                           flexDirection: 'row',
-                          justifyContent: 'space-between',
+                          justifyContent: 'space-evenly',
                         }}>
                         <View>
                           <Image
@@ -323,7 +336,7 @@ export default class Dashboard extends React.Component {
                           </Text>
                           <Text style={styles.priceStyle}>{item.price}/-</Text>
                         </View>
-                        <View style={{marginRight: 0}}>
+                        <View style={{justifyContent: 'space-between'}}>
                           {this.state.isAdded ? (
                             <Button style={styles.AddButtonStyle}>
                               <InputSpinner
@@ -492,7 +505,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 40,
     marginTop: 18,
-
     borderRadius: 40,
     borderBottomWidth: 2,
     borderTopWidth: 2,

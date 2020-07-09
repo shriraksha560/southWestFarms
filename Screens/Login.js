@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
-import { fonts } from '../Variables/fonts';
+import {fonts} from '../Variables/fonts';
 
 let responseJson;
 let responseErrorMessage;
@@ -103,9 +103,10 @@ export default class Login extends React.Component {
 
       //  alert('responseJson  - ' + JSON.stringify(responseJson));
       if (responseJsonresponsevalue == true) {
+        this.textInputPassword.clear();
+        this.textInputMobile.clear();
+
         this.props.navigation.navigate('Dashboard');
-        this.state.mobile = '';
-        this.state.password = '';
       } else if (responseJsonresponsevalue == false) {
         Snackbar.show({
           text: responseErrorMessage,
@@ -173,6 +174,9 @@ export default class Login extends React.Component {
                 maxLength={10}
                 placeholder="Enter your mobile number"
                 keyboardType="numeric"
+                ref={(input) => {
+                  this.textInputMobile = input;
+                }}
                 underlineColorAndroid="transparent"
                 onChangeText={(mobile) => {
                   return this.setState({mobile});
@@ -193,6 +197,9 @@ export default class Login extends React.Component {
                 placeholder="Enter your password"
                 keyboardType="default"
                 secureTextEntry={this.state.showPassword}
+                ref={(input) => {
+                  this.textInputPassword = input;
+                }}
                 underlineColorAndroid="transparent"
                 onChangeText={(password) => {
                   return this.setState({password});
@@ -279,7 +286,7 @@ const styles = StyleSheet.create({
     //fontWeight: '600',
     color: '#0FA521',
     fontWeight: 'bold',
-  //  fontFamily:fonts.fontBold
+    //  fontFamily:fonts.fontBold
   },
   inputContainer: {
     borderBottomColor: 'transparent',
@@ -324,7 +331,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontWeight: 'bold',
     //fontFamily:fonts.fontBold
-
   },
   forgotStyles: {
     color: 'white',

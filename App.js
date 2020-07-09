@@ -39,7 +39,7 @@ export default class App extends React.Component {
 
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Dashboard"
+          initialRouteName="Login"
           screenOptions={({route, navigation}) => ({
             gestureEnabled: true,
             cardOverlayEnabled: true,

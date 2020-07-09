@@ -36,6 +36,7 @@ export default class Checkout extends React.Component {
     this.state = {
       dataSource: [],
       q: [],
+      totalPrice: '',
     };
   }
   async componentDidMount() {
@@ -44,29 +45,23 @@ export default class Checkout extends React.Component {
     this.setState({
       dataSource: itemSelected.itemSelected,
     });
-    this.setState({
-      q: itemSelected.count,
-    });
-    console.log('qty got from dashboard to  checkout-' + this.state.q);
-
-    console.log('setData-' + this.state.dataSource);
-    console.log('LENGTH-' + this.state.dataSource.length);
+    this.calculatePrice(itemSelected);
   }
 
-  async calculatePrice(item, index) {
-    console.log('---------calculatePrice---------');
-    console.log('item :' + item);
-    console.log('stringified item :' + JSON.stringify(item));
-    console.log('index :' + index);
-
-    let totalPrice = await item.reduce(function (prev, cur) {
-      console.log(' prev + cur.totalPrice :' + prev + cur.totalPrice);
-      return prev + cur.totalPrice;
-    }, 0);
-
-    console.log('totalPrice:', totalPrice);
+  async calculatePrice(data) {
+    console.log('calculate price data :' + data);
+    let sum = 0;
+    {
+      data.itemSelected.map((item) => {
+        console.log('inside map :' + item);
+        sum = sum + item.price * item.count;
+        console.log('sum : ' + sum);
+        this.setState({
+          totalPrice: sum,
+        });
+      });
+    }
   }
-
   render() {
     const navigation = this.props.navigation;
     return (
@@ -156,7 +151,8 @@ export default class Checkout extends React.Component {
           <Button
             bordered
             style={styles.priceButtonStyle}
-            onPress={this.calculatePrice}>
+            // onPress={this.calculatePrice}
+          >
             <Text
               style={{
                 color: 'green',
@@ -164,7 +160,7 @@ export default class Checkout extends React.Component {
                 fontWeight: 'bold',
                 textAlign: 'center',
               }}>
-              Total
+              Total - {this.state.totalPrice}/-
             </Text>
           </Button>
           <Button

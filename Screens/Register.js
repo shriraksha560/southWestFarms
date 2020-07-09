@@ -74,18 +74,15 @@ export default class Register extends React.Component {
   };
 
   storeData = async () => {
-
     try {
-
-     await  AppAsyncStorage.save('savedName', `${this.state.name}`);
-     await  AppAsyncStorage.save('savedPassword', `${this.state.password}`);
-     await  AppAsyncStorage.save('savedMobileNumber', `${this.state.mobile}`);
+      await AppAsyncStorage.save('savedName', `${this.state.name}`);
+      await AppAsyncStorage.save('savedPassword', `${this.state.password}`);
+      await AppAsyncStorage.save('savedMobileNumber', `${this.state.mobile}`);
 
       // await AsyncStorage.setItem('savedName', this.state.name);
       // await AsyncStorage.setItem('savedPassword', this.state.password);
       // await AsyncStorage.setItem('savedMobileNumber', this.state.mobile);
     } catch (error) {
-
       console.log('storeData catch block' + error);
     }
   };
@@ -101,13 +98,9 @@ export default class Register extends React.Component {
       retrivedMobileNumber = await AppAsyncStorage.get('savedMobileNumber');
       console.log('retrivedMobileNumber   -' + retrivedMobileNumber);
     } catch (error) {
-      console.log('retieved catch block :'+error);
+      console.log('retieved catch block :' + error);
     }
   };
-
-
-  
-
 
   async callGetApartMentList() {
     try {
@@ -125,11 +118,9 @@ export default class Register extends React.Component {
       //  await AsyncStorage.setItem('savedApartmentList', responseStringify);
 
       console.log('responseJson' + responseJson);
-     this.setState({
-              dataSource: responseJson.response,
-            })
-        
-      
+      this.setState({
+        dataSource: responseJson.response,
+      });
     } catch (error) {
       console.error('catch block : ' + error);
       alert('error : ' + error);
@@ -225,6 +216,11 @@ export default class Register extends React.Component {
         this.retrieveData();
         // readData();
         // this.storeApartmentData();
+        this.textInputName.clear();
+        this.textInputMobile.clear();
+        this.textInputPassword.clear();
+        this.textInputConfirmPassword.clear();
+
         this.props.navigation.navigate('Login');
       } else if (response.status == 500) {
         Snackbar.show({
@@ -284,6 +280,9 @@ export default class Register extends React.Component {
                 maxLength={15}
                 placeholder="Enter your name"
                 keyboardType="default"
+                ref={(input) => {
+                  this.textInputName = input;
+                }}
                 underlineColorAndroid="transparent"
                 onChangeText={(name) => {
                   return this.setState({name});
@@ -303,6 +302,9 @@ export default class Register extends React.Component {
                 maxLength={10}
                 placeholder="Enter your mobile number"
                 keyboardType="numeric"
+                ref={(input) => {
+                  this.textInputMobile = input;
+                }}
                 underlineColorAndroid="transparent"
                 onChangeText={(mobile) => {
                   return this.setState({mobile});
@@ -324,6 +326,9 @@ export default class Register extends React.Component {
                 keyboardType="default"
                 secureTextEntry={this.state.showPassword}
                 underlineColorAndroid="transparent"
+                ref={(input) => {
+                  this.textInputPassword = input;
+                }}
                 onChangeText={(password) => {
                   return this.setState({password});
                 }}
@@ -362,6 +367,9 @@ export default class Register extends React.Component {
                 keyboardType="default"
                 secureTextEntry={this.state.showConfirmPassword}
                 underlineColorAndroid="transparent"
+                ref={(input) => {
+                  this.textInputConfirmPassword = input;
+                }}
                 onChangeText={(c_password) => {
                   return this.setState({c_password});
                 }}
