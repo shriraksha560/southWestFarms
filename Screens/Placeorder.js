@@ -33,6 +33,7 @@ export default class PlaceOrder extends React.Component {
     super(props);
     this.state = {
       success: '',
+     
     };
   }
 
@@ -61,53 +62,10 @@ export default class PlaceOrder extends React.Component {
     );
     return true;
   };
-  async callPlaceOrderApi() {
-    var requestBody = JSON.stringify({
-      userId: 18,
-      itemId: 2,
-      quantity: 3,
-    });
-    let response = await fetch('http://3.133.157.155:8080/orders/placeOrder', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: requestBody,
-    });
-    responseJson = await response.json();
-    console.log('responseJson' + responseJson);
-    responseJsonStringyfied = JSON.stringify(responseJson.status);
-    console.log('responseJsonStringyfied' + responseJsonStringyfied);
 
-    this.setState({
-      success: responseJsonStringyfied,
-    });
-    // alert(this.state.success);
-    if (response != null) {
-      Snackbar.show({
-        text: 'Your order placed succesfully!!',
-        backgroundColor: 'green',
-        duration: Snackbar.LENGTH_SHORT,
-      });
-      console.log('response.status' + responseJsonStringyfied);
-      //alert(responseJsonStringyfied);
-    } else {
-      Snackbar.show({
-        text: 'Something went wrong!!',
-        backgroundColor: 'red',
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }
-  }
 
-  catch(error) {
-    console.error('catch block : ' + error);
-    alert('error : ' + error);
-  }
 
   async componentDidMount() {
-    this.callPlaceOrderApi();
   }
   render() {
     return (

@@ -39,7 +39,7 @@ export default class App extends React.Component {
 
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Dashboard"
           screenOptions={({route, navigation}) => ({
             gestureEnabled: true,
             cardOverlayEnabled: true,
@@ -48,7 +48,7 @@ export default class App extends React.Component {
           headerMode="none">
           <Stack.Screen name="Splash" component={Splash} />
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Regisster" component={Register} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="Profile" component={MyProfile} />

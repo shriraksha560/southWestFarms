@@ -242,7 +242,9 @@ export default class Dashboard extends React.Component {
                 color="white"
                 onPress={this.toggleModal}
               />
-              <Modal isVisible={this.state.isModalVisible}>
+              <Modal
+                isVisible={this.state.isModalVisible}
+                onBackdropPress={() => this.setState({isModalVisible: false})}>
                 <View style={styles.modelViewStyle}>
                   <View style={{flexDirection: 'row'}}>
                     <View>

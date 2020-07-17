@@ -29,6 +29,7 @@ import Snackbar from 'react-native-snackbar';
 
 let responseJson;
 let responseJsonStringyfied;
+let retrievedUserId;
 
 export default class Checkout extends React.Component {
   constructor(props) {
@@ -37,8 +38,21 @@ export default class Checkout extends React.Component {
       dataSource: [],
       q: [],
       totalPrice: '',
+      userId: '',
+      itemId: [],
     };
   }
+  retrieveUserId = async () => {
+    try {
+      retrievedUserId = await AppAsyncStorage.get('savedUserId');
+      console.log('retrievedUserId  :' + retrievedUserId);
+      this.setState({
+        userId: retrievedUserId,
+      });
+    } catch (error) {
+      console.log('retrievedUserId catch block :' + error);
+    }
+  };
   async componentDidMount() {
     const itemSelected = this.props.route.params;
     console.log('itemSelected -' + JSON.stringify(itemSelected));
@@ -46,6 +60,7 @@ export default class Checkout extends React.Component {
       dataSource: itemSelected.itemSelected,
     });
     this.calculatePrice(itemSelected);
+    this.listingItemIds(itemSelected);
   }
 
   async calculatePrice(data) {
@@ -61,6 +76,64 @@ export default class Checkout extends React.Component {
         });
       });
     }
+  }
+  async listingItemIds(data) {
+    let arrItemId = [];
+    {
+      data.itemSelected.map((item) => {
+        arrItemId = arrItemId + item.id;
+        console.log('arrItemId : ' + arrItemId);
+        this.setState({
+          itemId: arrItemId,
+        });
+        console.log('item id :' + this.state.itemId);
+      });
+    }
+  }
+
+  async callPlaceOrderApi() {
+    var requestBody = JSON.stringify({
+      userId: this.state.userId,
+      itemId: 2,
+      quantity: 3,
+    });
+    let response = await fetch('http://3.133.157.155:8080/orders/placeOrder', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    });
+    responseJson = await response.json();
+    console.log('responseJson' + responseJson);
+    responseJsonStringyfied = JSON.stringify(responseJson.status);
+    console.log('responseJsonStringyfied' + responseJsonStringyfied);
+
+    this.setState({
+      success: responseJsonStringyfied,
+    });
+    // alert(this.state.success);
+    if (response != null) {
+      Snackbar.show({
+        text: 'Your order placed succesfully!!',
+        backgroundColor: 'green',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+      console.log('response.status' + responseJsonStringyfied);
+      //alert(responseJsonStringyfied);
+    } else {
+      Snackbar.show({
+        text: 'Something went wrong!!',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
+  }
+
+  catch(error) {
+    console.error('catch block : ' + error);
+    alert('error : ' + error);
   }
   render() {
     const navigation = this.props.navigation;
@@ -167,7 +240,8 @@ export default class Checkout extends React.Component {
             full
             style={styles.placeOrderButtonStyle}
             onPress={() => {
-              navigation.navigate('PlaceOrder');
+              // navigation.navigate('PlaceOrder');
+              this.callPlaceOrderApi();
             }}>
             <Text style={{color: 'white', fontWeight: 'bold'}}>
               PLACE ORDER

@@ -392,7 +392,8 @@ export default class Register extends React.Component {
                 />
               )}
             </View>
-            {this.state.dataSource.length > 0 ? (
+            {this.state.dataSource.length > 0 &&
+            this.state.dataSource.length != null ? (
               <View style={styles.pickerViewStyle}>
                 <Picker
                   style={styles.pickerStyle}
