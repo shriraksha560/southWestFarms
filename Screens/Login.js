@@ -94,6 +94,7 @@ export default class Login extends React.Component {
         },
       );
       responseJson = await response.json();
+      console.log('responseJson :' + responseJson);
       responseJsonresponsevalue = responseJson.response;
       console.log('responseJsonresponsevalue' + responseJsonresponsevalue);
       responseErrorMessage = responseJson.errorMessage;

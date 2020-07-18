@@ -31,6 +31,8 @@ let responseJson;
 let responseJsonStringyfied;
 let retrievedUserId;
 
+const queryString = require('query-string');
+
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
@@ -87,6 +89,7 @@ export default class Checkout extends React.Component {
           itemId: arrItemId,
         });
         console.log('item id :' + this.state.itemId);
+        //item id:456
       });
     }
   }
@@ -94,17 +97,20 @@ export default class Checkout extends React.Component {
   async callPlaceOrderApi() {
     var requestBody = JSON.stringify({
       userId: this.state.userId,
-      itemId: 2,
+      itemId: this.state.itemId,
       quantity: 3,
     });
-    let response = await fetch('http://3.133.157.155:8080/orders/placeOrder', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    let response = await fetch(
+      'http://3.133.157.155:8080/orders/placeOrder',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: requestBody,
       },
-      body: requestBody,
-    });
+    );
     responseJson = await response.json();
     console.log('responseJson' + responseJson);
     responseJsonStringyfied = JSON.stringify(responseJson.status);
@@ -114,7 +120,7 @@ export default class Checkout extends React.Component {
       success: responseJsonStringyfied,
     });
     // alert(this.state.success);
-    if (response != null) {
+    if (responseJson.status == 200) {
       Snackbar.show({
         text: 'Your order placed succesfully!!',
         backgroundColor: 'green',

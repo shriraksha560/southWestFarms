@@ -21,7 +21,7 @@ import {
   Toast,
   Card,
 } from 'native-base';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import InputSpinner from 'react-native-input-spinner';
 import Modal from 'react-native-modal';
@@ -217,6 +217,7 @@ export default class Dashboard extends React.Component {
     console.log('clearAsync log' + clearedAsync);
     this.props.navigation.navigate('Login');
   }
+  
 
   render() {
     console.log('datasource--' + this.state.dataSource);

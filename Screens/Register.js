@@ -204,7 +204,7 @@ export default class Register extends React.Component {
         body: requestBody,
       });
       responseJson = await response.json();
-      console.log('responseJson' + responseJson);
+      console.log('responseJson ' + responseJson);
       //  alert('Status - ' + JSON.stringify(responseJson));
       if (response.status == 200) {
         Snackbar.show({
